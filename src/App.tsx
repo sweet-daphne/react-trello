@@ -27,7 +27,7 @@ function App() {
     console.log(info);
 
     const { destination, draggableId, source } = info;
-
+    if (!destination) return;
     if (destination?.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
@@ -36,6 +36,19 @@ function App() {
         return {
           ...allBoards,
           [source.droppableId]: boardCopy,
+        };
+      });
+    }
+    if (destination.droppableId !== source.droppableId) {
+      setToDos((allBoard) => {
+        const sourceBoard = [...allBoard[source.droppableId]];
+        const destinationBoard = [...allBoard[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoard,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
         };
       });
     }
